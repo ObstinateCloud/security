@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @title: WebConfig
@@ -23,9 +25,11 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("zjy")
+                //密文 zjy
+//                .password("$2a$10$dIHsUce.Gmjx.xYjffI3y.JcO/18q72Oe2KeeiUsOrczyFtGqTn8W")
                 .password("zjy")
                 //角色一定要配
-                .roles("zjy")
+                .roles("admin")
                     ;
     }
 
@@ -36,24 +40,43 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .formLogin()
-                //loginPage 地址必须与前端form的action地址一致
-                .loginPage("/login-page.html")
+                //如果只配置了loginPage，则前端form的action地址与loginPage一致
+                .loginPage("/mylogin.html")
+                //如果同时配置了loginPage和loginProcessingUrl，则前端form的action地址与loginProcessingUrl一致,否则无法跳转
+                .loginProcessingUrl("/doLogin")
                 .usernameParameter("user")
                 .passwordParameter("pwd")
                 .permitAll()
-//                .loginProcessingUrl("../templates/index.html")
+                //1.服务端跳转，无论从哪来都去loginSuccess
+//                .successForwardUrl("/loginSuccess")
+                //2.客户端跳转，重定向到登录前的路径 一般1.和2.只需配置一个
+//                .defaultSuccessUrl("/defaultSuccessUrl",true)//无论如何都跳转效果和1一样
+                .defaultSuccessUrl("/defaultSuccessUrl")
+//                .failureForwardUrl("/loginFailureForward")
+                .failureUrl("/loginFailure")
+                .and()
+                .logout()
+//                .logoutUrl("/myLogout")
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/myLogoutPost","POST"))
                 .and()
                 .csrf().disable();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
+        web.ignoring().antMatchers("/verifycode","/js/**","/css/**","/images/**");
     }
 
     @Bean
     PasswordEncoder passwordEncoder(){
 //        return new BCryptPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    public static void main(String[] args) {
+        String password = "zjy";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encode = encoder.encode(password);
+        System.out.println(encode);
     }
 }
