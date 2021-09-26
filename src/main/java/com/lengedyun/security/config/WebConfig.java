@@ -33,7 +33,7 @@ import java.io.PrintWriter;
  * @auther: 张健云
  * @date: 2021/5/28 8:12
  */
-@Configuration
+//@Configuration
 public class WebConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
