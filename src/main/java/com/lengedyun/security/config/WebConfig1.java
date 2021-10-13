@@ -18,7 +18,7 @@ import javax.sql.DataSource;
  * @auther: zhangjianyun
  * @date: 2021/9/26 16:28
  */
-@Configuration
+//@Configuration
 public class WebConfig1 extends WebSecurityConfigurerAdapter {
 
     @Autowired
