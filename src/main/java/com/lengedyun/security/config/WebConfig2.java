@@ -5,6 +5,7 @@ import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import com.lengedyun.security.auth.MyAuthenticationProvider;
+import com.lengedyun.security.auth.MyWebAuthenticationDetailsSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,8 @@ import java.util.Properties;
 @Configuration
 public class WebConfig2 extends WebSecurityConfigurerAdapter {
 
-
+    @Autowired
+    MyWebAuthenticationDetailsSource myWebAuthenticationDetailsSource;
 
     @Bean
     Producer verifyCode() {
@@ -57,6 +59,7 @@ public class WebConfig2 extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .authenticationDetailsSource(myWebAuthenticationDetailsSource)
                 .successHandler((req, resp, auth) -> {
                     resp.setContentType("application/json;charset=utf-8");
                     PrintWriter out = resp.getWriter();

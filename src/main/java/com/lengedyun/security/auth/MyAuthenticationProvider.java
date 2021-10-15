@@ -18,12 +18,33 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class MyAuthenticationProvider extends DaoAuthenticationProvider {
 
+    /**
+     * v1.0
+     * @param userDetails
+     * @param authentication
+     * @throws AuthenticationException
+     */
+//    @Override
+//    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+//        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//        String code = req.getParameter("code");
+//        String verify_code = (String) req.getSession().getAttribute("verify_code");
+//        if (code == null || verify_code == null || !code.equals(verify_code)) {
+//            throw new AuthenticationServiceException("验证码错误");
+//        }
+//        super.additionalAuthenticationChecks(userDetails, authentication);
+//    }
+
+    /**
+     * v2.0
+     * @param userDetails
+     * @param authentication
+     * @throws AuthenticationException
+     */
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String code = req.getParameter("code");
-        String verify_code = (String) req.getSession().getAttribute("verify_code");
-        if (code == null || verify_code == null || !code.equals(verify_code)) {
+        //获取到自己定义的参数
+        if (!((MyWebAuthenticationDetails)authentication.getDetails()).isPassed()) {
             throw new AuthenticationServiceException("验证码错误");
         }
         super.additionalAuthenticationChecks(userDetails, authentication);

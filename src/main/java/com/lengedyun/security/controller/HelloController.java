@@ -3,6 +3,7 @@ package com.lengedyun.security.controller;
 import com.lengedyun.security.dao.UserDao;
 import com.lengedyun.security.entity.Role;
 import com.lengedyun.security.entity.User;
+import com.lengedyun.security.service.IpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +25,12 @@ public class HelloController {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private IpService ipService;
+
     @GetMapping("sayHello")
     public String hello(String name){
+        ipService.getIpAddr();
         return "hello--welcome"+name;
     }
 
