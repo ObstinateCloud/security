@@ -22,18 +22,18 @@ import java.io.IOException;
 @RestController
 public class VerifyCodeController {
 
-    @Autowired
-    Producer producer;
-
-    @GetMapping("/vc.jpg")
-    public void getVerifyCode(HttpServletResponse resp, HttpSession session) throws IOException {
-        resp.setContentType("image/jpeg");
-        String text = producer.createText();
-        session.setAttribute("verify_code", text);
-        BufferedImage image = producer.createImage(text);
-        try(ServletOutputStream out = resp.getOutputStream()) {
-            ImageIO.write(image, "jpg", out);
-        }
-    }
+//    @Autowired
+//    Producer producer;
+//
+//    @GetMapping("/vc.jpg")
+//    public void getVerifyCode(HttpServletResponse resp, HttpSession session) throws IOException {
+//        resp.setContentType("image/jpeg");
+//        String text = producer.createText();
+//        session.setAttribute("verify_code", text);
+//        BufferedImage image = producer.createImage(text);
+//        try(ServletOutputStream out = resp.getOutputStream()) {
+//            ImageIO.write(image, "jpg", out);
+//        }
+//    }
 
 }

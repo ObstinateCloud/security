@@ -33,7 +33,7 @@ import java.util.Properties;
  * @auther: zhangjianyun
  * @date: 2021/9/26 16:28
  */
-@Configuration
+//@Configuration
 public class WebConfig2 extends WebSecurityConfigurerAdapter {
 
     @Autowired
