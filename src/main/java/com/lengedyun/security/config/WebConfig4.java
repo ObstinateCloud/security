@@ -1,26 +1,25 @@
 package com.lengedyun.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 
 
 /**
  * @title: WebConfig1
- * @description: 限制登录用户数量
+ * @description: 集群化部署 session共享
  * @auther: zhangjianyun
  * @date: 2021/9/26 16:28
  */
-//@Configuration
-public class WebConfig3 extends WebSecurityConfigurerAdapter {
+@Configuration
+public class WebConfig4 extends WebSecurityConfigurerAdapter {
 
 
 
@@ -51,13 +50,22 @@ public class WebConfig3 extends WebSecurityConfigurerAdapter {
 //    }
 
 
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
+//    解决集群模式下并发管理失效问题
 
+    @Autowired
+    FindByIndexNameSessionRepository sessionRepository;
 
+    @Bean
+    SpringSessionBackedSessionRegistry sessionRegistry() {
+        return new SpringSessionBackedSessionRegistry(sessionRepository);
+    }
+//    解决集群模式下并发管理失效问题
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
